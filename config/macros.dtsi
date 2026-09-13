@@ -222,3 +222,17 @@
     bindings = <&mkp MB1 &mkp MB1>;
     display-name = "Double Click";
   };
+
+  switch_host: switch_host {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    wait-ms = <0>;
+    tap-ms = <20>;
+    bindings
+      = <&out OUT_BLE>
+      , <&macro_wait_time 150>
+      , <&kp LG(LA(N0))>
+      , <&macro_wait_time 150>
+      , <&out OUT_USB>;
+    display-name = "Switch Host";
+  };
