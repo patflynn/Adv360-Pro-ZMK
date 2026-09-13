@@ -222,3 +222,41 @@
     bindings = <&mkp MB1 &mkp MB1>;
     display-name = "Double Click";
   };
+
+  // Host switching for the KVM setup. BT profile 0 = weller (monitor on
+  // DisplayPort), profile 1 = the laptop (monitor on Thunderbolt). weller's
+  // Hyprland binds Super+Alt+1 / Super+Alt+2 to select those monitor inputs;
+  // using an explicit input per key (not a toggle) keeps each key idempotent.
+  //
+  // &out OUT_BLE comes first so the chord reaches weller over Bluetooth even
+  // when a charging cable is plugged in. BT_SEL 0 is a no-op when already on
+  // weller. The 500 ms waits cover the profile switch: ZMK keeps bonded hosts
+  // connected, so it is normally instant, but the wait also covers a
+  // reconnect. If switching is unreliable, raise the waits (try 1000 ms).
+  to_weller: to_weller {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    wait-ms = <0>;
+    tap-ms = <20>;
+    bindings
+      = <&out OUT_BLE>
+      , <&bt BT_SEL 0>
+      , <&macro_wait_time 500>
+      , <&kp LG(LA(N1))>;
+    display-name = "To weller";
+  };
+
+  to_laptop: to_laptop {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    wait-ms = <0>;
+    tap-ms = <20>;
+    bindings
+      = <&out OUT_BLE>
+      , <&bt BT_SEL 0>
+      , <&macro_wait_time 500>
+      , <&kp LG(LA(N2))>
+      , <&macro_wait_time 500>
+      , <&bt BT_SEL 1>;
+    display-name = "To laptop";
+  };
